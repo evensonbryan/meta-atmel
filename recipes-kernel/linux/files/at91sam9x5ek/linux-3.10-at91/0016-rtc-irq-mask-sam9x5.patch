@@ -1,0 +1,20 @@
+diff --git a/arch/arm/mach-at91/sysirq_mask.c b/arch/arm/mach-at91/sysirq_mask.c
+index 2ba694f..eb3d2a5 100644
+--- a/arch/arm/mach-at91/sysirq_mask.c
++++ b/arch/arm/mach-at91/sysirq_mask.c
+@@ -37,12 +37,7 @@ void __init at91_sysirq_mask_rtc(u32 rtc_base)
+ 	if (!base)
+ 		return;
+ 
+-	mask = readl_relaxed(base + AT91_RTC_IMR);
+-	if (mask) {
+-		pr_info("AT91: Disabling rtc irq\n");
+-		writel_relaxed(mask, base + AT91_RTC_IDR);
+-		(void)readl_relaxed(base + AT91_RTC_IMR);	/* flush */
+-	}
++	writel_relaxed(0x1f, base + AT91_RTC_IDR);
+ 
+ 	iounmap(base);
+ }
+--
+1.8.3.2

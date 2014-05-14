@@ -19,7 +19,9 @@ SRC_URI_append_at91sam9x5ek += "file://${MACHINE}/${KBRANCH}/UBI_config.cfg \
     file://${MACHINE}/${KBRANCH}/0011-serial-use-dev_get_platdata.patch \ 
     file://${MACHINE}/${KBRANCH}/0012-tty-serial-at91-fix-uart-usart-selection-for-older-p.patch \ 
     file://${MACHINE}/${KBRANCH}/0013-tty-serial-at91-add-a-fallback-option-to-determine-u.patch \ 
-    file://${MACHINE}/${KBRANCH}/0014-serial-unify-serial-bindings-into-a-single-dir.patch \ 
+    file://${MACHINE}/${KBRANCH}/0014-serial-unify-serial-bindings-into-a-single-dir.patch \
+    file://${MACHINE}/${KBRANCH}/0015-rtc-ACKPUD-int.patch \
+    file://${MACHINE}/${KBRANCH}/0016-rtc-irq-mask-sam9x5.patch \
     "
     
 # Increment the recipe revision

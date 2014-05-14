@@ -56,11 +56,11 @@ LINUX_VERSION_EXTENSION ?= "-custom"
 
 # Override SRCREV to point to a different commit in a bbappend file to
 # build a different release of the Linux kernel.
-# latest as of 2013-11-21 6e7c32db645841d4b373074c4c8eacbe517d629d
-SRCREV="6e7c32db645841d4b373074c4c8eacbe517d629d"
+# latest as of 2014-03-27 68f2c28207fbc081f7be75fc01aca4827aa4a9f1
+SRCREV="68f2c28207fbc081f7be75fc01aca4827aa4a9f1"
 PV = "${LINUX_VERSION}+${SRCREV}"
 
-PR = "r0"
+PR = "r1"
 
 # Override COMPATIBLE_MACHINE to include your machine in a bbappend
 # file. Leaving it empty here ensures an early explicit build failure.
