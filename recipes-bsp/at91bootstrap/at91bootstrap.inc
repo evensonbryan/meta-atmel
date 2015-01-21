@@ -31,6 +31,10 @@ AT91BOOTSTRAP_SYMLINK ?= "at91bootstrap-${AT91BOOTSTRAP_MACHINE}.${AT91BOOTSTRAP
 
 EXTRA_OEMAKE = 'CROSS_COMPILE=${TARGET_PREFIX} CC="${TARGET_PREFIX}gcc ${TOOLCHAIN_OPTIONS}"'
 
+FILES_${PN} += " \
+    /boot/* \
+    "
+    
 do_configure() {
 	# Copy board defconfig to .config if .config does not exist. This
 	# allows recipes to manage the .config themselves in
@@ -62,6 +66,13 @@ do_compile() {
 	oe_runmake
 }
 
+do_install() {
+    install -d ${D}/boot
+    install ${S}/binaries/${AT91BOOTSTRAP_BINARY} ${D}/boot
+    ln -s /boot/${AT91BOOTSTRAP_BINARY} ${D}/boot/${AT91BOOTSTRAP_SYMLINK}
+}
+addtask install after do_deploy
+
 do_deploy () {
 	install -d ${DEPLOYDIR}
 	install ${S}/binaries/${AT91BOOTSTRAP_BINARY} ${DEPLOYDIR}/${AT91BOOTSTRAP_IMAGE}
@@ -76,5 +87,23 @@ do_deploy () {
 	ln -sf ${AT91BOOTSTRAP_IMAGE} BOOT.BIN
 }
 addtask deploy before do_build after do_compile
+
+pkg_postinst_${PN} () {
+#!/bin/sh -e
+# Burn the bootstrap to flash, but only attempt if we're on the actual platform
+bootstrap_file=/boot/${AT91BOOTSTRAP_SYMLINK}
+if test "x$D" = "x"; then
+    if [ -e "$bootstrap_file" ]; then
+        echo "Erasing old bootstrap..."
+        flash_erase /dev/mtd0 0 0
+        echo "Writing new bootstrap..."
+        nandwrite -p /dev/mtd0 "$bootstrap_file"
+        echo "Bootstrap upgrade complete."
+        touch /var/run/reboot-required
+        echo "${PN}" >>/var/run/reboot-required.pkgs
+    fi
+fi   
+
+}
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
