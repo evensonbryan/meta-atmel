@@ -1,0 +1,67 @@
+From 1a73b551f8c0cc4941dd80f4b04afdcd548d7f02 Mon Sep 17 00:00:00 2001
+From: Bryan Evenson <bevenson@melinkcorp.com>
+Date: Thu, 29 Jan 2015 13:00:30 -0500
+Subject: [PATCH] include/configs/at91sam9x5ek: Adjust boot parameters
+
+Adjust some of the boot and startup parameters for our image.
+
+* Reduce the boot delay from 3 seconds to 1 second
+* Enable the hardware watchdog
+* Change the boot command to read the Linux device tree
+* Change the boot parameters to make all sections r/w
+
+Signed-off-by: Bryan Evenson <bevenson@melinkcorp.com>
+---
+ include/configs/at91sam9x5ek.h |   14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/include/configs/at91sam9x5ek.h b/include/configs/at91sam9x5ek.h
+index c10228a..5b2634e 100644
+--- a/include/configs/at91sam9x5ek.h
++++ b/include/configs/at91sam9x5ek.h
+@@ -52,7 +52,7 @@
+ #define CONFIG_ATMEL_LCD_RGB565
+ #define CONFIG_SYS_CONSOLE_IS_IN_ENV
+ 
+-#define CONFIG_BOOTDELAY	3
++#define CONFIG_BOOTDELAY	1
+ 
+ /*
+  * BOOTP options
+@@ -167,6 +167,10 @@
+ #define CONFIG_USB_STORAGE
+ #endif
+ 
++/* Watchdog */
++#define CONFIG_HW_WATCHDOG
++#define CONFIG_AT91SAM9_WATCHDOG
++
+ #define CONFIG_SYS_LOAD_ADDR		0x22000000	/* load address */
+ 
+ #define CONFIG_SYS_MEMTEST_START	CONFIG_SYS_SDRAM_BASE
+@@ -180,7 +184,9 @@
+ #define CONFIG_ENV_SIZE		0x20000		/* 1 sector = 128 kB */
+ #define CONFIG_BOOTCOMMAND	"nand read " \
+ 				"0x22000000 0x200000 0x300000; " \
+-				"bootm 0x22000000"
++				"nand read " \
++				"0x21000000 0x180000 0x40000; " \
++				"bootm 0x22000000 - 0x21000000"
+ #elif defined(CONFIG_SYS_USE_SPIFLASH)
+ /* bootstrap + u-boot + env + linux in spi flash */
+ #define CONFIG_ENV_IS_IN_SPI_FLASH
+@@ -220,9 +226,9 @@
+ #else
+ #define CONFIG_BOOTARGS							\
+ 	"console=ttyS0,115200 earlyprintk "				\
+-	"mtdparts=atmel_nand:256k(bootstrap)ro,512k(uboot)ro,"		\
++	"mtdparts=atmel_nand:256k(bootstrap),512k(uboot),"		\
+ 	"256k(env),256k(env_redundant),256k(spare),"			\
+-	"512k(dtb),6M(kernel)ro,-(rootfs) "				\
++	"512k(dtb),6M(kernel),-(rootfs) "				\
+ 	"rootfstype=ubifs ubi.mtd=7 root=ubi0:rootfs rw"
+ #endif
+ 
+-- 
+1.7.9.5
+
