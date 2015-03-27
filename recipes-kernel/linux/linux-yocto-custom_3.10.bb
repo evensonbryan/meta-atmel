@@ -17,7 +17,6 @@ SRCREV_sama5d4-xplained = "46f4253693b0ee8d25214e7ca0dde52e788ffe95"
 
 KBRANCH = "linux-3.10-at91"
 SRC_URI = "git://github.com/linux4sam/linux-at91.git;protocol=git;branch=${KBRANCH};nocheckout=1"
-SRC_URI += "file://defconfig"
 
 python __anonymous () {
   if d.getVar('UBOOT_FIT_IMAGE', True) == 'xyes':
