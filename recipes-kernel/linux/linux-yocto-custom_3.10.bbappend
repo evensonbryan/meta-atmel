@@ -1,7 +1,7 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:${THISDIR}/files/:"
-RREPLACES_${PN} = "kernel-image (< 3.10)"
-RCONFLICTS_${PN} = "kernel-image (< 3.10)"
-PR = "r6"
+RREPLACES_kernel-image = "kernel-image (<= 3.10) kernel-image-3.10.0-yocto-standard"
+RCONFLICTS_kernel-image = "kernel-image (<= 3.10) kernel-image-3.10.0-yocto-standard"
+PR = "r7"
 
 SRC_URI_append_at91sam9x5ek = " \
     file://${MACHINE}/${KBRANCH}/defconfig \
