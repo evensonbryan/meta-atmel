@@ -2,6 +2,8 @@ require u-boot.inc
 
 # Note that this package provides the runtime package for U-Boot
 RPROVIDES_${PN} = "u-boot"
+RREPLACES_${PN} = "u-boot"
+RCONFLICTS_${PN} = "u-boot"
 
 # To build u-boot for your machine, provide the following lines in your machine
 # config, replacing the assignments as appropriate for your machine.
