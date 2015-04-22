@@ -6,3 +6,10 @@ SRC_URI = "https://github.com/linux4sam/at91bootstrap/archive/v${PV}.tar.gz;name
           "
 SRC_URI[tarball.md5sum] = "8030f57bd742b7300ef41c78d4a310e0"
 SRC_URI[tarball.sha256sum] = "3f475b011e48acbd90181482b088be8b3f87cfe7ee452ce26c1bec22849d997d"
+
+# We are changing the version naming scheme in a way that may not trigger a firmware upgrade.
+# Use the Package Epoch variable to trigger an upgrade.
+PE = "1"
+
+# Update the INC_PR
+PR = "$(INC_PR).1"

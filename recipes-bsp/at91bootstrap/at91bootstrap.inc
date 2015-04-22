@@ -92,12 +92,19 @@ pkg_postinst_${PN} () {
 #!/bin/sh -e
 # Burn the bootstrap to flash, but only attempt if we're on the actual platform
 bootstrap_file=/boot/${AT91BOOTSTRAP_SYMLINK}
+bootstrap_w_params_file=/boot/params_prepend${AT91BOOTSTRAP_SYMLINK}
 if test "x$D" = "x"; then
     if [ -e "$bootstrap_file" ]; then
+        # Generate the introductory 208 bytes in NAND flash that contain the PMECC settings
+        rm -f /boot/bootstrap_params.txt
+        for (( i=0; i<52; i++ )); do echo -ne "\x05\x04\xc0\xc0" >> /boot/bootstrap_params.txt; done
+
+        # Join the parameters and the bootstrap file to create a single file to write to flash
+        cat /boot/bootstrap_params.txt "$bootstrap_file" > "$bootstrap_w_params_file"
         echo "Erasing old bootstrap..."
         flash_erase /dev/mtd0 0 0
         echo "Writing new bootstrap..."
-        nandwrite -p /dev/mtd0 "$bootstrap_file"
+        nandwrite -N -p /dev/mtd0 "$bootstrap_w_params_file"
         echo "Bootstrap upgrade complete."
         touch /var/run/reboot-required
         echo "${PN}" >>/var/run/reboot-required.pkgs
@@ -107,3 +114,5 @@ fi
 }
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
+
+INC_PR = "r1"
